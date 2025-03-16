@@ -1,4 +1,5 @@
-﻿using ControlBee.Interfaces;
+﻿using ControlBee.Exceptions;
+using ControlBee.Interfaces;
 using ControlBee.Models;
 using ControlBee.Utils;
 using Moq;
@@ -22,7 +23,9 @@ public class ActorUtils
             if (excludes?.ContainsKey(key) is true)
                 continue;
             if (value is true)
-                throw new Exception();
+                throw new ValueError("Boolean value is true.");
+            if (value is Guid guid && guid != Guid.Empty)
+                throw new ValueError("GUID is not empty.");
             if (value is Dict nested)
                 EnsureAllStatusFalse(nested, excludes?.GetValueOrDefault(key) as Dict);
         }
