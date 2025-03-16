@@ -39,4 +39,26 @@ public class ActorUtilsTest : ActorFactoryBase
         actor.SetStatusByActor("Peer", "ReadyToDo", Guid.NewGuid());
         Assert.Throws<ValueError>(() => ActorUtils.EnsureAllStatusFalse(actor));
     }
+
+    [Fact]
+    public void SetupActionOnSignalTest()
+    {
+        var sendMock = new SendMock();
+        var actor1 = MockActorFactory.Create("Actor1");
+        var actor2 = MockActorFactory.Create("Actor2");
+
+        var callCount = 0;
+        sendMock.SetupActionOnSignal(
+            actor1,
+            actor2,
+            "Hello",
+            message =>
+            {
+                callCount++;
+            }
+        );
+        ActorUtils.SendSignal(actor1, actor2, "Hello");
+        ActorUtils.SendSignal(actor1, actor2, "Hello");
+        Assert.Equal(1, callCount);
+    }
 }

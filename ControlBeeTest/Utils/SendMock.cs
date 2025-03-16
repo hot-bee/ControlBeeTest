@@ -17,6 +17,11 @@ public class SendMock
     private readonly Dictionary<
         (IActor actorFrom, IActor actorTo, string signalName),
         Action<Message>
+    > _signalByActorMap = [];
+
+    private readonly Dictionary<
+        (IActor actorFrom, IActor actorTo, string signalName),
+        Action<Message>
     > _signalMap = [];
 
     public void SetupActionOnMessage(
@@ -34,10 +39,15 @@ public class SendMock
 
     public void RemoveActionOnSignalByActor(IActor actorFrom, IActor actorTo, string signalName)
     {
+        _signalByActorMap.Remove((actorFrom, actorTo, signalName));
+    }
+
+    public void RemoveActionOnSignal(IActor actorFrom, IActor actorTo, string signalName)
+    {
         _signalMap.Remove((actorFrom, actorTo, signalName));
     }
 
-    public void SetupActionOnSignalByActor(
+    public void SetupActionOnSignal(
         IActor actorFrom,
         IActor actorTo,
         string signalName,
@@ -49,6 +59,20 @@ public class SendMock
         if (!_signalMap.ContainsKey((actorFrom, actorTo, signalName)))
             _signalMap[(actorFrom, actorTo, signalName)] = _ => { };
         _signalMap[(actorFrom, actorTo, signalName)] += action;
+    }
+
+    public void SetupActionOnSignalByActor(
+        IActor actorFrom,
+        IActor actorTo,
+        string signalName,
+        Action<Message> action
+    )
+    {
+        Setup(actorTo);
+
+        if (!_signalByActorMap.ContainsKey((actorFrom, actorTo, signalName)))
+            _signalByActorMap[(actorFrom, actorTo, signalName)] = _ => { };
+        _signalByActorMap[(actorFrom, actorTo, signalName)] += action;
     }
 
     public void SetupSendMessageOnSignalByActor(
@@ -78,7 +102,27 @@ public class SendMock
             .Callback<Message>(message =>
             {
                 if (message.Name == "_status")
+                {
                     foreach (var ((actorFrom, actorTo, signalName), value) in _signalMap)
+                    {
+                        if (message.Sender != actorFrom)
+                            continue;
+                        if (actor != actorTo)
+                            continue;
+                        if (DictPath.Start(message.DictPayload)[signalName].Value is Guid)
+                        {
+                            value(message);
+                            RemoveActionOnSignal(actorFrom, actorTo, signalName);
+                        }
+
+                        if (DictPath.Start(message.DictPayload)[signalName].Value is true)
+                        {
+                            value(message);
+                            RemoveActionOnSignal(actorFrom, actorTo, signalName);
+                        }
+                    }
+
+                    foreach (var ((actorFrom, actorTo, signalName), value) in _signalByActorMap)
                     {
                         if (message.Sender != actorFrom)
                             continue;
@@ -92,6 +136,7 @@ public class SendMock
                             value(message);
                             RemoveActionOnSignalByActor(actorFrom, actorTo, signalName);
                         }
+
                         if (
                             DictPath.Start(message.DictPayload)[actorTo.Name][signalName].Value
                             is true
@@ -101,6 +146,7 @@ public class SendMock
                             RemoveActionOnSignalByActor(actorFrom, actorTo, signalName);
                         }
                     }
+                }
 
                 foreach (var ((actorFrom, actorTo, messageName), value) in _messageMap)
                 {
