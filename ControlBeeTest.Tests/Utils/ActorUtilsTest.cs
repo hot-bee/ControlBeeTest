@@ -1,4 +1,5 @@
-﻿using ControlBeeTest.Utils;
+﻿using ControlBee.Services;
+using ControlBeeTest.Utils;
 using JetBrains.Annotations;
 using Moq;
 using Xunit;
@@ -14,6 +15,6 @@ public class ActorUtilsTest
         var actor1 = MockActorFactory.Create("Actor1");
         var actor2 = MockActorFactory.Create("Actor2");
         ActorUtils.SendSignalByActor(actor1, actor2, "Hello");
-        ActorUtils.VerifyGetSignalByActor(actor2, "Hello", Times.Once);
+        ActorUtils.VerifyGetSignalByActor(actor1, actor2, "Hello", Times.Once);
     }
 }

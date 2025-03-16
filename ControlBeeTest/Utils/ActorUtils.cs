@@ -213,7 +213,12 @@ public class ActorUtils
         actorTo.Send(new Message(actorFrom, "_status", new Dict { ["_error"] = true }));
     }
 
-    public static void VerifyGetSignalByActor(IActor actorTo, string signalName, Func<Times> times)
+    public static void VerifyGetSignalByActor(
+        IActor actorFrom,
+        IActor actorTo,
+        string signalName,
+        Func<Times> times
+    )
     {
         Mock.Get(actorTo)
             .Verify(
@@ -221,6 +226,7 @@ public class ActorUtils
                     m.Send(
                         It.Is<Message>(message =>
                             message.Name == "_status"
+                            && message.Sender == actorFrom
                             && DictPath.Start(message.DictPayload)[actorTo.Name][signalName].Value
                                 as bool?
                                 == true
