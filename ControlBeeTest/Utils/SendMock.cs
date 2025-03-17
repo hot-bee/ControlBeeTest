@@ -129,7 +129,9 @@ public class SendMock
                         if (actor != actorTo)
                             continue;
 
-                        var signalValue = DictPath.Start(message.DictPayload)[signalName].Value;
+                        var signalValue = DictPath
+                            .Start(message.DictPayload)[actorTo.Name][signalName]
+                            .Value;
                         if (
                             signalValue != null
                             && signalValue is not false
