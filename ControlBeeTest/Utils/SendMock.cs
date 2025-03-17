@@ -109,13 +109,13 @@ public class SendMock
                             continue;
                         if (actor != actorTo)
                             continue;
-                        if (DictPath.Start(message.DictPayload)[signalName].Value is Guid)
-                        {
-                            value(message);
-                            RemoveActionOnSignal(actorFrom, actorTo, signalName);
-                        }
 
-                        if (DictPath.Start(message.DictPayload)[signalName].Value is true)
+                        var signalValue = DictPath.Start(message.DictPayload)[signalName].Value;
+                        if (
+                            signalValue != null
+                            && signalValue is not false
+                            && !signalValue.Equals(Guid.Empty)
+                        )
                         {
                             value(message);
                             RemoveActionOnSignal(actorFrom, actorTo, signalName);
@@ -128,18 +128,12 @@ public class SendMock
                             continue;
                         if (actor != actorTo)
                             continue;
-                        if (
-                            DictPath.Start(message.DictPayload)[actorTo.Name][signalName].Value
-                            is Guid
-                        )
-                        {
-                            value(message);
-                            RemoveActionOnSignalByActor(actorFrom, actorTo, signalName);
-                        }
 
+                        var signalValue = DictPath.Start(message.DictPayload)[signalName].Value;
                         if (
-                            DictPath.Start(message.DictPayload)[actorTo.Name][signalName].Value
-                            is true
+                            signalValue != null
+                            && signalValue is not false
+                            && !signalValue.Equals(Guid.Empty)
                         )
                         {
                             value(message);
