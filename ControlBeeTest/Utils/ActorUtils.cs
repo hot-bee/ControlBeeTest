@@ -196,6 +196,11 @@ public class ActorUtils
         );
     }
 
+    public static void SendSignalByActor(IActor actorFrom, IActor actorTo, Dict signals)
+    {
+        actorTo.Send(new Message(actorFrom, "_status", new Dict { [actorTo.Name] = signals }));
+    }
+
     public static void SendSignal(IActor actorFrom, IActor actorTo, string signalName)
     {
         SendSignal(actorFrom, actorTo, signalName, true);
