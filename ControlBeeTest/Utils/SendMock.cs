@@ -157,7 +157,7 @@ public class SendMock
             .Returns<Message>(message => message.Id);
     }
 
-    public void SetupReplySignalByActor(
+    public void SetupReplyOnSignalByActor(
         IActor actorFrom,
         IActor actorTo,
         string signalNameFrom,
@@ -204,7 +204,7 @@ public class SendMock
         );
     }
 
-    public void SetupReplyErrorSignalByActor(IActor actorFrom, IActor actorTo, string signalName)
+    public void SetupReplyErrorOnSignalByActor(IActor actorFrom, IActor actorTo, string signalName)
     {
         SetupActionOnSignalByActor(
             actorFrom,
