@@ -165,13 +165,13 @@ public class ActorUtils
         };
     }
 
-    public static void SetupActionOnStateChanged(Actor actor, Type stateType, Action action)
+    public static void SetupActionOnStateChanged(Actor actor, Type stateType, Action<IState> action)
     {
         actor.StateChanged += (_, tuple) =>
         {
             var (_, newState) = tuple;
             if (newState.GetType() == stateType)
-                action();
+                action(newState);
         };
     }
 
