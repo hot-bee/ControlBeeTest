@@ -18,6 +18,7 @@ public abstract class ActorFactoryBase : IDisposable
     protected IAnalogInputFactory AnalogInputFactory;
     protected IDialogFactory DialogFactory;
     protected IBinaryActuatorFactory BinaryActuatorFactory;
+    protected IVisionFactory VisionFactory;
     protected IVariableManager VariableManager;
     protected IAxisFactory AxisFactory;
     protected IScenarioFlowTester ScenarioFlowTester;
@@ -110,6 +111,9 @@ public abstract class ActorFactoryBase : IDisposable
         BinaryActuatorFactory =
             config.BinaryActuatorFactory
             ?? new BinaryActuatorFactory(SystemConfigurations, TimeManager, ScenarioFlowTester);
+        VisionFactory =
+            config.VisionFactory
+            ?? new VisionFactory(SystemConfigurations, DeviceManager, TimeManager);
         SystemPropertiesDataSource =
             config.SystemPropertiesDataSource ?? new SystemPropertiesDataSource();
         ActorFactory =
@@ -124,6 +128,7 @@ public abstract class ActorFactoryBase : IDisposable
                 DialogFactory,
                 InitializeSequenceFactory,
                 BinaryActuatorFactory,
+                VisionFactory,
                 VariableManager,
                 TimeManager,
                 ScenarioFlowTester,

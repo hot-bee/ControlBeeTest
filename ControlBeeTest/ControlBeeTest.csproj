@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ControlBee" Version="0.0.110" />
+    <PackageReference Include="ControlBee" Version="0.0.131" />
     <PackageReference Include="Moq" Version="4.20.72" />
   </ItemGroup>
 

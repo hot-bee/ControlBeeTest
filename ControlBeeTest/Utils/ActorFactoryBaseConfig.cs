@@ -22,4 +22,5 @@ public class ActorFactoryBaseConfig
     public IAnalogInputFactory? AnalogInputFactory;
     public IAnalogOutputFactory? AnalogOutputFactory;
     public IDialogFactory? DialogFactory;
+    public IVisionFactory? VisionFactory;
 }
