@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using ControlBee.Exceptions;
 using ControlBee.Models;
+using ControlBeeAbstract.Exceptions;
 using ControlBeeTest.Utils;
 using JetBrains.Annotations;
 using Moq;
