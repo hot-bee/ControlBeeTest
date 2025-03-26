@@ -133,7 +133,8 @@ public abstract class ActorFactoryBase : IDisposable
                 TimeManager,
                 ScenarioFlowTester,
                 SystemPropertiesDataSource,
-                ActorRegistry
+                ActorRegistry,
+                DeviceManager
             );
     }
 }
